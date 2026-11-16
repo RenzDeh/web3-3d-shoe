@@ -18,3 +18,33 @@ body {
   height: 100%;
   outline: none;
 }
+
+.viewer-panel {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  max-width: min(28rem, calc(100% - 2rem));
+  padding: 1rem;
+  border: 1px solid #555;
+  border-radius: 0.75rem;
+  color: #fff;
+  background: #191919ee;
+  font: 1rem/1.5 system-ui, sans-serif;
+}
+
+.viewer-panel h1 { font-size: 1.25rem; }
+.viewer-panel p { margin-top: 0.5rem; }
+#model-status { color: #c6d9ff; }
+.viewer-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.viewer-actions button {
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #8bb4ff;
+  border-radius: 0.4rem;
+  background: #243b60;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.viewer-actions button:hover { background: #345487; }
+.viewer-actions button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }

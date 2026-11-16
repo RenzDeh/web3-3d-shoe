@@ -28,6 +28,22 @@ controls.enableDamping = true;
 controls.target.set(0, 0.5, 0);
 controls.minDistance = 2;
 controls.maxDistance = 12;
+controls.saveState();
+
+const rotationButton = document.querySelector('#toggle-rotation');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const setAutoRotate = (enabled) => {
+  controls.autoRotate = enabled;
+  rotationButton.setAttribute('aria-pressed', String(enabled));
+  rotationButton.textContent = enabled ? 'Pauzeer draaien' : 'Automatisch draaien';
+};
+controls.autoRotateSpeed = 1;
+setAutoRotate(!reducedMotion.matches);
+reducedMotion.addEventListener('change', (event) => setAutoRotate(!event.matches));
+rotationButton.addEventListener('click', () => setAutoRotate(!controls.autoRotate));
+document.querySelector('#reset-view').addEventListener('click', () => controls.reset());
+
+const modelStatus = document.querySelector('#model-status');
 
 // --- Licht ----------------------------------------------------------------
 const keyLight = new THREE.DirectionalLight(0xffffff, 2);
@@ -55,10 +71,8 @@ placeholder.position.y = 0.9;
 placeholder.castShadow = true;
 scene.add(placeholder);
 
-let model = placeholder;
-
 new GLTFLoader().load(
-  '/models/shoe.glb',
+  `${import.meta.env.BASE_URL}models/shoe.glb`,
   (gltf) => {
     const shoe = gltf.scene;
     shoe.traverse((child) => {
@@ -77,10 +91,12 @@ new GLTFLoader().load(
 
     scene.remove(placeholder);
     scene.add(shoe);
-    model = shoe;
+    modelStatus.textContent = 'Schoenmodel geladen.';
   },
   undefined,
-  () => console.info('Geen public/models/shoe.glb gevonden — placeholder wordt getoond.')
+  () => {
+    modelStatus.textContent = 'Schoenmodel niet beschikbaar. Een demomodel wordt getoond.';
+  }
 );
 
 // --- Resize ---------------------------------------------------------------
@@ -95,7 +111,6 @@ const timer = new THREE.Timer();
 renderer.setAnimationLoop((time) => {
   timer.update(time);
   const delta = timer.getDelta();
-  if (model === placeholder) model.rotation.y += delta * 0.5;
-  controls.update();
+  controls.update(delta);
   renderer.render(scene, camera);
 });

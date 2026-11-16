@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <canvas id="scene"></canvas>
+    <canvas id="scene" aria-label="Interactieve 3D-viewer"></canvas>
+    <section class="viewer-panel" aria-label="Bediening 3D-viewer">
+      <h1>3D Shoe</h1>
+      <p>Sleep om te draaien. Scroll of knijp om te zoomen.</p>
+      <p id="model-status" role="status">Schoenmodel laden…</p>
+      <div class="viewer-actions">
+        <button id="toggle-rotation" type="button" aria-pressed="false">Automatisch draaien</button>
+        <button id="reset-view" type="button">Herstel weergave</button>
+      </div>
+    </section>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
